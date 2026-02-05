@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{route('collection.report')}}" method="GET">
+        <form action="{{route('service.charge.report.data')}}" method="GET">
             @csrf
             <div class="card card-custom gutter-b">
                 <div class="card-header flex-wrap py-5">
@@ -425,7 +425,6 @@
                                                             <td class="text-right">Service Charge</td>
                                                             <td class="text-right">Card Payment</td>
                                                             <td class="text-right">Cash Payment</td>
-                                                            <td class="text-right">Total Received Payment</td>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -435,9 +434,6 @@
                                                         $total_card = 0;
                                                         $total_cash = 0;
                                                         $total_paid_service_charge = 0;
-                                                        $total_visa_fee = 0;
-                                                        $total_service_charge = 0;
-                                                        $total_due = 0;
                                                         $total_received = 0;
                                                         @endphp
                                                         @if(!empty($report))
@@ -465,44 +461,16 @@
                                                                 @php
                                                                 $paidPartialPayment =
                                                                 $row->payments->where('payment_status',
-                                                                3)->sum('payment');
+                                                                3)->sum('service_charge');
                                                                 $total_partial += $paidPartialPayment;
                                                                 echo $paidPartialPayment;
                                                                 @endphp
                                                             </td>
-                                                            <td class="text-center">{{$row->discount}}
+                                                            <td class="text-center">
                                                                 @php
-                                                                $total_discount += $row->discount;
-                                                                @endphp
-                                                            </td>
-                                                            <td class="text-right">
-                                                                @php
-                                                                $cardPayment = $row->payments->where('account_type',
-                                                                '!=', 4)->sum('payment');
-                                                                $total_card += $cardPayment;
-                                                                echo $cardPayment;
-                                                                @endphp
-                                                            </td>
-                                                            <td class="text-right">
-                                                                @php
-                                                                $cashPayment = $row->payments->where('account_type',
-                                                                4)->sum('payment');
-                                                                $total_cash += $cashPayment;
-                                                                echo $cashPayment;
-                                                                @endphp
-                                                            </td>
-                                                            <td class="text-right">{{ $row->checklist->service_charge }}
-                                                                @php
-                                                                $total_service_charge +=
-                                                                $row->checklist->service_charge;
-                                                                @endphp
-                                                            </td>
-
-                                                            <td class="text-right">{{ $row->checklist->price -
-                                                                $row->checklist->service_charge}}
-                                                                @php
-                                                                $total_visa_fee += ($row->checklist->price -
-                                                                $row->checklist->service_charge);
+                                                                $paymentDiscount = $row->payments->sum('discount');
+                                                                $total_discount += $paymentDiscount;
+                                                                echo $paymentDiscount;
                                                                 @endphp
                                                             </td>
                                                             <td class="text-right">
@@ -514,14 +482,20 @@
                                                                 echo $paidServiceCharge;
                                                                 @endphp
                                                             </td>
-                                                            <td class="text-right">{{ $row->due_amount }}
+                                                            <td class="text-right">
                                                                 @php
-                                                                $total_due += $row->due_amount;
+                                                                $cardPayment = $row->payments->where('account_type',
+                                                                '!=', 4)->sum('service_charge');
+                                                                $total_card += $cardPayment;
+                                                                echo $cardPayment;
                                                                 @endphp
                                                             </td>
-                                                            <td class="text-right">{{ $row->paid_amount }}
+                                                            <td class="text-right">
                                                                 @php
-                                                                $total_received += $row->paid_amount;
+                                                                $cashPayment = $row->payments->where('account_type',
+                                                                4)->sum('service_charge');
+                                                                $total_cash += $cashPayment;
+                                                                echo $cashPayment;
                                                                 @endphp
                                                             </td>
                                                         </tr>
@@ -529,17 +503,14 @@
                                                         @endif
                                                     </tbody>
                                                     <tfoot>
-                                                        <tr class="text-white bg-primary" style="font-weight: 600;font-size: 1rem;border-bottom-width: 1px;">
+                                                        <tr class="text-white bg-primary"
+                                                            style="font-weight: 600;font-size: 1rem;border-bottom-width: 1px;">
                                                             <td class="text-center" colspan="9"></td>
                                                             <td class="text-right">Partial Payment</td>
                                                             <td class="text-right">Discount</td>
+                                                            <td class="text-right">Service Charge</td>
                                                             <td class="text-right">Card Payment</td>
                                                             <td class="text-right">Cash Payment</td>
-                                                            <td class="text-right">Service Charge</td>
-                                                            <td class="text-right">Visa Fee</td>
-                                                            <td class="text-right">Paid Service Charge</td>
-                                                            <td class="text-right">Due Payment</td>
-                                                            <td class="text-right">Total Received Payment</td>
                                                         </tr>
                                                         <tr class="text-black">
                                                             <td style="text-align: right !important;font-weight:bold;"
@@ -552,25 +523,13 @@
                                                                 {{ $total_discount }}/ TK</td>
                                                             <td class="text-right"
                                                                 style="text-align: right !important;font-weight:bold;">
+                                                                {{$total_paid_service_charge}}/ TK</td>
+                                                            <td class="text-right"
+                                                                style="text-align: right !important;font-weight:bold;">
                                                                 {{ $total_card }}/ TK</td>
                                                             <td class="text-right"
                                                                 style="text-align: right !important;font-weight:bold;">
                                                                 {{$total_cash}}/ TK</td>
-                                                            <td class="text-right"
-                                                                style="text-align: right !important;font-weight:bold;">
-                                                                {{$total_service_charge}}/ TK</td>
-                                                            <td class="text-right"
-                                                                style="text-align: right !important;font-weight:bold;">
-                                                                {{$total_visa_fee}}/ TK</td>
-                                                            <td class="text-right"
-                                                                style="text-align: right !important;font-weight:bold;">
-                                                                {{$total_paid_service_charge}}/ TK</td>
-                                                            <td class="text-right"
-                                                                style="text-align: right !important;font-weight:bold;">
-                                                                {{$total_due}}/ TK</td>
-                                                            <td class="text-right"
-                                                                style="text-align: right !important;font-weight:bold;">
-                                                                {{$total_received}}/ TK</td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>

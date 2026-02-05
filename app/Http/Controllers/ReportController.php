@@ -236,7 +236,7 @@ class ReportController extends BaseController
         $report = WalkinAppInfo::with(['payments', 'checklist'])
             ->whereHas('payments', function ($q) use ($from, $to) {
                 $q->whereBetween('payment_date', [$from, $to])
-                    ->where('paid_amount', '>', 0);
+                    ->where('service_charge', '>', 0);
             })
             ->get();
         return view('report.service_charge_payment_report', compact('report'));
