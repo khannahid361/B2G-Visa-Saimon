@@ -184,3 +184,5 @@ Route::get('/test-ssl', [SslCommerzPaymentController::class, 'testSslCommerz']);
 Route::get('payment-and-checklist', 'ReportController@paymentAndChecklist')->name('payment.and.checklist');
 
 Route::get('app-payment-update', 'ReportController@appPaymentUpdate')->name('app.payment.update');
+Route::get('service-charge-report', 'ReportController@serviceChargeReport')->name('service.charge.report');
+Route::get('service-charge-report-data', 'ReportController@serviceChargeReportData')->name('service.charge.report.data');

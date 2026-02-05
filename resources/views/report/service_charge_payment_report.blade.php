@@ -422,12 +422,9 @@
                                                             <td class="text-center">Passport No</td>
                                                             <td class="text-right">Partial Payment</td>
                                                             <td class="text-right">Discount</td>
+                                                            <td class="text-right">Service Charge</td>
                                                             <td class="text-right">Card Payment</td>
                                                             <td class="text-right">Cash Payment</td>
-                                                            <td class="text-right">Service Charge</td>
-                                                            <td class="text-right">Visa Fee</td>
-                                                            <td class="text-right">Paid Service Charge</td>
-                                                            <td class="text-right">Due Payment</td>
                                                             <td class="text-right">Total Received Payment</td>
                                                         </tr>
                                                     </thead>
