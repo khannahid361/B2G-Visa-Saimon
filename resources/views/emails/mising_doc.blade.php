@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Saimon Group</title>
+    <style>
+        @media only screen and (max-width: 620px) {
+            table.body h1 {
+                font-size: 28px !important;
+                margin-bottom: 10px !important;
+            }
+
+            table.body p,
+            table.body ul,
+            table.body ol,
+            table.body td,
+            table.body span,
+            table.body a {
+                font-size: 16px !important;
+            }
+
+            table.body .wrapper,
+            table.body .article {
+                padding: 10px !important;
+            }
+
+            table.body .content {
+                padding: 0 !important;
+            }
+
+            table.body .container {
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            table.body .main {
+                border-left-width: 0 !important;
+                border-radius: 0 !important;
+                border-right-width: 0 !important;
+            }
+
+            table.body .btn table {
+                width: 100% !important;
+            }
+
+            table.body .btn a {
+                width: 100% !important;
+            }
+
+            table.body .img-responsive {
+                height: auto !important;
+                max-width: 100% !important;
+                width: auto !important;
+            }
+        }
+        @media all {
+            .ExternalClass {
+                width: 100%;
+            }
+
+            .ExternalClass,
+            .ExternalClass p,
+            .ExternalClass span,
+            .ExternalClass font,
+            .ExternalClass td,
+            .ExternalClass div {
+                line-height: 100%;
+            }
+
+            .apple-link a {
+                color: inherit !important;
+                font-family: inherit !important;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                text-decoration: none !important;
+            }
+
+            #MessageViewBody a {
+                color: inherit;
+                text-decoration: none;
+                font-size: inherit;
+                font-family: inherit;
+                font-weight: inherit;
+                line-height: inherit;
+            }
+
+            .btn-primary table td:hover {
+                background-color: #34495e !important;
+            }
+
+            .btn-primary a:hover {
+                background-color: #34495e !important;
+                border-color: #34495e !important;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: #f6f6f6; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; width: 100%;" width="100%" bgcolor="#f6f6f6">
+    <tr>
+        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>
+        <td class="container" style="font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; max-width: 580px; padding: 10px; width: 580px; margin: 0 auto;" width="580" valign="top">
+            <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 580px; padding: 10px;">
+
+                <!-- START CENTERED WHITE CONTAINER -->
+                <table role="presentation" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border-radius: 3px; width: 100%;" width="100%">
+
+                    <!-- START MAIN CONTENT AREA -->
+                    <tr>
+                        <td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">
+                            <div class="logo" style="text-align: center;">
+                                <a href="https://ibb.co/Ksf0DdM"><img src="https://i.ibb.co/Yd1RXmz/logo.png" alt="logo" border="0" style="height: 75px;"></a>
+                            </div>
+                            <h2 style="text-align: center;font-family: initial;"> Online Visa Application Management System </h2>
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
+                                <tr>
+                                    <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">
+                                        <p style="font-family: sans-serif; font-size: 16px; font-weight: bold; margin: 0; margin-bottom: 15px;">Dear <span style="color: green">{{$datas->p_name}}</span> !</p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your Current Application Status is <span style="color: green">Required Missing Documents</span>. Please submit the documents on an urgent basis. </p>
+
+                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td align="left" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top">
+                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
+                                                        <tbody>
+                                                            <p style="font-size: 20px;border-bottom: 2px solid;width:50%;">Required Document List:</p>
+                                                            <tr>
+                                                                <td style="font-weight: bold">{{$note}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
+                                                        <tbody>
+                                                        <p style="font-size: 20px;border-bottom: 2px solid;width:41%;">Collector Timing:</p>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Collector Name :</td>
+                                                            <td style="font-weight: bold">{{$collector_info->name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Schedule Date :</td>
+                                                            <td style="font-weight: bold">{{$datas->scheduleDate}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Schedule Time :</td>
+                                                            <td style="font-weight: bold">{{$datas->scheduleTime}}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
+                                                        <tbody>
+
+                                                        <p style="font-size: 20px;border-bottom: 2px solid;width:41%;">Service Details</p>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Application ID: <span style="font-weight: normal">{{$datas->uniqueKey}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Application Status: <span style="font-weight: normal">{{WALKIN_APP_STATUS_VALUE[$status_data]}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Applied Country: <span style="font-weight: normal">{{$datas->checklist->toCountry->country_name}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Visa Category: <span style="font-weight: normal">{{$datas->checklist->title}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Passport Number:
+                                                                <span style="font-weight: normal">
+                                                                    @foreach($datas->passports as $row)
+                                                                        {{$row->passport_no}},
+                                                                    @endforeach
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Payment History: <span style="font-weight: normal">{{$datas->paid_amount}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold">Payment Status: <span style="font-weight: normal">{{WALKIN_APP_PAYMENT_STATUS[$datas->payment_status]}}</span></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Thanks,<br>Saimon Group<br>Online Visa Processing Team.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- END MAIN CONTENT AREA -->
+                </table>
+                <!-- END CENTERED WHITE CONTAINER -->
+
+                <!-- START FOOTER -->
+                <div class="footer" style="clear: both; margin-top: 10px; text-align: center; width: 100%;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
+                        <tr>
+                            <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #999999; font-size: 12px; text-align: center;" valign="top" align="center">
+                                <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Head Office: Saimon Centre, H#4A, R#22, Gulshan- 1 C/A, Dhaka-1212, Bangladesh.<br> +88 02 222282273-74, 222285307, 01404033110 <br>(2nd Floor).</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content-block powered-by" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #999999; font-size: 12px; text-align: center;" valign="top" align="center">
+                                Powered by <a href="https://visasaimon.com/" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">Saimon Group</a>.
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- END FOOTER -->
+
+            </div>
+        </td>
+        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>
+    </tr>
+</table>
+</body>
+</html>

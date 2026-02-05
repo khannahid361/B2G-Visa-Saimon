@@ -1,0 +1,124 @@
+<?php
+
+namespace Modules\Bank\Entities;
+
+use App\Models\BaseModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+use Modules\Setting\Entities\Showroom;
+
+class Bank extends BaseModel
+{
+    protected $fillable = ['account_id', 'bank_name','balance', 'employee_id', 'account_name', 'account_number', 'status', 'created_by', 'modified_by'];
+
+    //relation with user
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'id');
+    }
+
+
+    /******************************************
+     * * * Begin :: Custom Datatable Code * * *
+    *******************************************/
+    //custom search column property
+    protected $_bank_name;
+    protected $_account_name;
+    protected $_account_number;
+
+    //methods to set custom search property value
+    public function setBankName($bank_name)
+    {
+        $this->_bank_name = $bank_name;
+    }
+    public function setAccountName($account_name)
+    {
+        $this->_account_name = $account_name;
+    }
+    public function setAccountNumber($account_number)
+    {
+        $this->_account_number = $account_number;
+    }
+
+
+    private function get_datatable_query(){
+
+        $query = self::with('user')->where('status', 1);
+
+        //search query
+        if (!empty($this->_bank_name)) {
+            $query->where('bank_name', 'like', '%' . $this->_bank_name . '%');
+        }
+        if (!empty($this->_account_name)) {
+            $query->where('account_name', 'like', '%' . $this->_account_name . '%');
+        }
+        if (!empty($this->_account_number)) {
+            $query->where('account_number', 'like', '%' . $this->_account_number . '%');
+        }
+
+        //order by data fetching code
+        if (isset($this->orderValue) && isset($this->dirValue)) { //orderValue is the index number of table header and dirValue is asc or desc
+            $query->orderBy($this->column_order[$this->orderValue], $this->dirValue); //fetch data order by matching column
+        } else if (isset($this->order)) {
+            $query->orderBy(key($this->order), $this->order[key($this->order)]);
+        }
+        return $query;
+    }
+
+    public function getDatatableList()
+    {
+        $query = $this->get_datatable_query();
+        if ($this->lengthVlaue != -1) {
+            $query->offset($this->startVlaue)->limit($this->lengthVlaue);
+        }
+        return $query->get();
+    }
+
+    public function count_filtered()
+    {
+        $query = $this->get_datatable_query();
+        return $query->count();
+    }
+
+    public function count_all()
+    {
+        return self::toBase()->count();
+    }
+    /******************************************
+     * * * End :: Custom Datatable Code * * *
+    *******************************************/
+
+    /*************************************
+    * * *  Begin :: Cache Data * * *
+    **************************************/
+//    protected const ALL_BANKS    = '_banks';
+//
+//    public static function allBankList(){
+//        return Cache::rememberForever(self::ALL_BANKS, function () {
+//            return self::toBase()->orderBy('bank_name','asc')->get();
+//        });
+//    }
+//
+//    public static function flushCache(){
+//        Cache::forget(self::ALL_BANKS);
+//    }
+//
+//    public static function boot(){
+//        parent::boot();
+//
+//        static::updated(function () {
+//            self::flushCache();
+//        });
+//
+//        static::created(function() {
+//            self::flushCache();
+//        });
+//
+//        static::deleted(function() {
+//            self::flushCache();
+//        });
+//    }
+    /***********************************
+    * * *  Begin :: Cache Data * * *
+    ************************************/
+}

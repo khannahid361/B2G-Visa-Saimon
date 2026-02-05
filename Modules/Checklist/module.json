@@ -1,0 +1,13 @@
+{
+    "name": "Checklist",
+    "alias": "checklist",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Checklist\\Providers\\ChecklistServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

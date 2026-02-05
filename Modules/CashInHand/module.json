@@ -1,0 +1,13 @@
+{
+    "name": "CashInHand",
+    "alias": "cashinhand",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\CashInHand\\Providers\\CashInHandServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

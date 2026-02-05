@@ -1,0 +1,13 @@
+{
+    "name": "WalkIn",
+    "alias": "walkin",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\WalkIn\\Providers\\WalkInServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
