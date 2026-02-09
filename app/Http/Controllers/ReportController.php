@@ -242,7 +242,48 @@ class ReportController extends BaseController
         return view('report.service_charge_payment_report', compact('report'));
     }
 
-    public function paymentAndChecklist()
+    
+        public function serviceChargeDetailsReport(Request $request)
+    {
+        $setTitle = __('Service Charge Details');
+        $setSubTitle = __('Service Charge Details Report');
+        $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
+
+        return view('report.service_charge_details');
+    }
+    public function serviceChargeDetailsReportData(Request $request)
+    {
+        $setTitle    = __('Service Charge Details');
+        $setSubTitle = __('Service Charge Details Report');
+        $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
+
+        // Execute the query and retrieve the data
+        $report = WalkinAppInfo::with('payments')->select(
+            'walkin_app_infos.id',
+            'walkin_app_infos.name',
+            'walkin_app_infos.p_name',
+            'walkin_app_infos.uniqueKey',
+            'walkin_app_infos.visaType_id',
+            'walkin_app_infos.visa_category',
+            'walkin_app_infos.email',
+            'walkin_app_infos.phone',
+            'walkin_app_infos.paid_amount',
+            'walkin_app_infos.due_amount',
+            'walkin_app_infos.discount',
+            'walkin_app_infos.group_price'
+        )
+            ->whereHas('payments', function ($paymentDetails) use ($request) {
+                $from   = $request->form_date;
+                $to     = $request->to_date;
+                $paymentDetails->where('service_charge', '>', 0)->whereBetween('payment_date', [$from, $to]);
+            })
+            ->orderBy('walkin_app_infos.id', 'DESC') // Order by a column in the walkin_app_infos table
+            ->get();
+
+        return view('report.service_charge_details', compact('report'));
+    }
+
+    public function payment1AndChecklist()
     {
         $datas = Payment::leftJoin('walkin_app_infos', 'payments.walkin_app_info_id', '=', 'walkin_app_infos.id')
             ->leftJoin('checklists', 'walkin_app_infos.visa_category', '=', 'checklists.id')
@@ -267,7 +308,7 @@ class ReportController extends BaseController
         return view('report.kamrul', compact('datas'));
     }
 
-    public function appPaymentUpdate()
+    public function app1PaymentUpdate()
     {
         $affectedRows = Payment::whereHas('appInfo', function ($q) {
             $q->where('visa_category', 616);

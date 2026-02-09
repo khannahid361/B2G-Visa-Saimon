@@ -186,3 +186,6 @@ Route::get('payment-and-checklist', 'ReportController@paymentAndChecklist')->nam
 Route::get('app-payment-update', 'ReportController@appPaymentUpdate')->name('app.payment.update');
 Route::get('service-charge-report', 'ReportController@serviceChargeReport')->name('service.charge.report');
 Route::get('service-charge-report-data', 'ReportController@serviceChargeReportData')->name('service.charge.report.data');
+
+Route::get('service-charge-details-report', 'ReportController@serviceChargeDetailsReport')->name('service.charge.details.report');
+Route::get('service-charge-details-report-data', 'ReportController@serviceChargeDetailsReportData')->name('service.charge.details.report.data');
