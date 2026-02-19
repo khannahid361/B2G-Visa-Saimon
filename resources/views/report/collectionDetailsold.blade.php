@@ -426,6 +426,7 @@
                                                             <td class="text-right">Card Payment</td>
                                                             <td class="text-right">Cash Payment</td>
                                                             <td class="text-center">Service Charge</td>
+                                                            <td class="text-right">Paid Service Charge</td>
                                                             <td class="text-center">Paid Amount</td>
                                                             <td class="text-center">Total Visa Fee</td>
                                                             <td class="text-center">Due Amount</td>
@@ -481,7 +482,7 @@
                                                             <td class="text-right">
                                                                 @php
                                                                 $paidPartialPayment =
-                                                                $filteredPayments->where('payment_status',
+                                                                $row->payments->where('payment_status',
                                                                 3)->sum('payment');
                                                                 $total_partial += $paidPartialPayment;
                                                                 echo $paidPartialPayment;
@@ -494,7 +495,7 @@
                                                             </td>
                                                             <td class="text-right">
                                                                 @php
-                                                                $cardPayment = $filteredPayments->where('account_type',
+                                                                $cardPayment = $row->payments->where('account_type',
                                                                 '!=', 4)->sum('payment');
                                                                 $total_card += $cardPayment;
                                                                 echo $cardPayment;
@@ -502,16 +503,22 @@
                                                             </td>
                                                             <td class="text-right">
                                                                 @php
-                                                                $cashPayment = $filteredPayments->where('account_type',
+                                                                $cashPayment = $row->payments->where('account_type',
                                                                 4)->sum('payment');
                                                                 $total_cash += $cashPayment;
                                                                 echo $cashPayment;
                                                                 @endphp
                                                             </td>
+                                                            <td class="text-right">{{ $row->checklist->service_charge }}
+                                                                @php
+                                                                $total_service_charge +=
+                                                                $row->checklist->service_charge;
+                                                                @endphp
+                                                            </td>
                                                             <td class="text-right">
                                                                 @php
                                                                 $paidServiceCharge =
-                                                                $filteredPayments->sum('service_charge');
+                                                                $row->payments->sum('service_charge');
                                                                 $total_paid_service_charge +=
                                                                 $paidServiceCharge;
                                                                 echo $paidServiceCharge;
@@ -532,9 +539,11 @@
                                                                     @endforeach
                                                                 </table>
                                                             </td>
-                                                            <td class="text-right">{{ $filteredPayments->sum('visa_fee') }}
+                                                            <td class="text-right">{{ $row->checklist->price -
+                                                                $row->checklist->service_charge}}
                                                                 @php
-                                                                $total_visa_fee += $filteredPayments->sum('visa_fee');
+                                                                $total_visa_fee += ($row->checklist->price -
+                                                                $row->checklist->service_charge);
                                                                 @endphp
                                                             </td>
                                                             <td class="text-right">{{ $row->due_amount }}
@@ -560,7 +569,8 @@
                                                             <td class="text-right">Discount</td>
                                                             <td class="text-right">Card Payment</td>
                                                             <td class="text-right">Cash Payment</td>
-                                                            <td class="text-right">Service Charge</td>
+                                                            <td class="text-center">Service Charge</td>
+                                                            <td class="text-right">Paid Service Charge</td>
                                                             <td class="text-center">Paid Amount</td>
                                                             <td class="text-center">Total Visa Fee</td>
                                                             <td class="text-center">Due Amount</td>
@@ -581,6 +591,9 @@
                                                             <td class="text-right"
                                                                 style="text-align: right !important;font-weight:bold;">
                                                                 {{$total_cash}}/ TK</td>
+                                                            <td class="text-right"
+                                                                style="text-align: right !important;font-weight:bold;">
+                                                                {{$total_service_charge}}/ TK</td>
                                                             <td class="text-right"
                                                                 style="text-align: right !important;font-weight:bold;">
                                                                 {{$total_paid_service_charge}}/ TK</td>

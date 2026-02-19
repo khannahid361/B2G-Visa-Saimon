@@ -38,15 +38,47 @@ class ReportController extends BaseController
     public function totalCollectionDetails(Request $request)
     {
         $setTitle = __('Total Collection');
-        $setSubTitle = __('Total Collection Report');
+        $setSubTitle = __('Total Collection Report Details');
         $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
 
         return view('report.collectionDetails');
     }
-    public function totalCollectionDetailData(Request $request)
+    public function totalCollectionDetailDataOld(Request $request)
     {
         $setTitle    = __('Total Collection');
-        $setSubTitle = __('Total Collection Report');
+        $setSubTitle = __('Total Collection Report Details');
+        $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
+
+        // Execute the query and retrieve the data
+        $report = WalkinAppInfo::with('payments')->select(
+            'walkin_app_infos.id',
+            'walkin_app_infos.name',
+            'walkin_app_infos.p_name',
+            'walkin_app_infos.uniqueKey',
+            'walkin_app_infos.visaType_id',
+            'walkin_app_infos.visa_category',
+            'walkin_app_infos.email',
+            'walkin_app_infos.phone',
+            'walkin_app_infos.paid_amount',
+            'walkin_app_infos.due_amount',
+            'walkin_app_infos.discount',
+            'walkin_app_infos.group_price'
+        )
+            ->whereHas('payments', function ($paymentDetails) use ($request) {
+                $from   = $request->form_date;
+                $to     = $request->to_date;
+                $paymentDetails->whereBetween('payment_date', [$from, $to]);
+            })
+            ->orderBy('walkin_app_infos.id', 'DESC') // Order by a column in the walkin_app_infos table
+            ->get();
+
+        return view('report.collectionDetailsold', compact('report'));
+    }
+
+        public function totalCollectionDetailData(Request $request)
+    {
+        $setTitle    = __('Total Collection');
+        $setSubTitle = __('Total Collection Report Details');
         $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
 
         // Execute the query and retrieve the data

@@ -372,6 +372,7 @@
                     $('.common').show();
                     $('.n_total').show();
                     $('.discount').hide();
+                    $('#discount').val(0);
                     $('.discounted-by').hide();
                     $('.available-discount').hide();
                     $('.total_price').hide();
@@ -389,6 +390,7 @@
                     $('.n_total').show();
                     $('.common').show();
                     $('.discount').show();
+                    $('#discount').val();
                     $('.discounted-by').show();
                     $('.available-discount').show();
                     $('.total_price').show();

@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="form-group col-md-4 discount" style="display: none">
                                     <label for="discount">{{__('Discount (Optional)')}}</label>
-                                    <input type="text" class="form-control common-field" name="discount" id="discount"
+                                    <input type="text" class="form-control" name="discount" id="discount"
                                         value="">
                                 </div>
                                 <div class="form-group col-md-4 discounted-by" style="display: none">

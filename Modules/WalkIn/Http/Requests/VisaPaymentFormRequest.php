@@ -17,6 +17,7 @@ class VisaPaymentFormRequest extends FormRequest
         $this->rules['visa_payment_status'] = ['required'];
         $this->rules['service_charge']      = ['required'];
         $this->rules['visa_fee']            = ['required'];
+        $this->rules['discount']            = ['required', 'numeric', 'min:0'];
 
         return $this->rules;
     }
