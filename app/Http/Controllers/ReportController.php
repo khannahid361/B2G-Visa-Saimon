@@ -315,11 +315,11 @@ class ReportController extends BaseController
         return view('report.service_charge_details', compact('report'));
     }
 
-    public function payment1AndChecklist()
+    public function paymentAndChecklist()
     {
         $datas = Payment::leftJoin('walkin_app_infos', 'payments.walkin_app_info_id', '=', 'walkin_app_infos.id')
             ->leftJoin('checklists', 'walkin_app_infos.visa_category', '=', 'checklists.id')
-            ->where('payments.payment_status', 2)
+            ->where('payments.payment_status', 3)
             ->where('payments.payment', 0)
             ->whereBetween('payments.payment_date', ['2026-01-01', '2026-02-02'])
             ->select([
@@ -340,7 +340,7 @@ class ReportController extends BaseController
         return view('report.kamrul', compact('datas'));
     }
 
-    public function app1PaymentUpdate()
+    public function appPaymentUpdate()
     {
         $affectedRows = Payment::whereHas('appInfo', function ($q) {
             $q->where('visa_category', 616);
