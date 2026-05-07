@@ -1356,6 +1356,8 @@ class WalkInController extends BaseController
         WalkinAppChecklist::where('walkin_app_info_id', $request->id)->delete();
         WalkinAppDetails::where('walkin_app_info_id', $request->id)->delete();
         Passport::where('walkin_app_info_id', $request->id)->delete();
+        $payments = Payment::where('walkin_app_info_id', $request->id)->delete();
+        $refunds = Refund::where('walkin_app_info_id', $request->id)->delete();
         $data   = $this->model->where('id', $request->id)->delete();
         $output = $this->delete_message($data);
         return response()->json($output);
