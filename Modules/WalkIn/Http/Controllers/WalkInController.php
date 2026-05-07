@@ -31,6 +31,7 @@ use Modules\MobileBank\Entities\MobileBank;
 use Modules\WalkIn\Entities\Payment;
 use Modules\WalkIn\Entities\PoInvoice;
 use Modules\WalkIn\Entities\Passport;
+use Modules\WalkIn\Entities\Refund;
 use Modules\WalkIn\Entities\StatusLog;
 use Modules\WalkIn\Entities\WalkinApp;
 use Modules\WalkIn\Entities\WalkinAppChecklist;
@@ -189,6 +190,7 @@ class WalkInController extends BaseController
                     } else {
                         $val = (($value->checklist->price ? $value->checklist->price : '') - $value->paid_amount) - $value->discount;
                     }
+                    $refundable_amount = $value->paid_amount - $value->checklist->service_charge;
                     $passportLabels = '<div class="test-width text-nowrap">';
                     $passports = DB::table('passports')->where('passports.walkin_app_info_id', $value->id)->get();
                     foreach ($passports as $index => $passport) {
@@ -209,17 +211,13 @@ class WalkInController extends BaseController
 
                     $action = '';
                     if (permission('edit-all-application')) {
-                        if ($value->app_status != 3 and $value->status == 1) {
-                            $action .= ' <a class="dropdown-item" href="' . route("walkIn.edit", $value->id) . '">' . $this->actionButton('Edit') . '</a>';
-                        }
+                        $action .= ' <a class="dropdown-item" href="' . route("walkIn.edit", $value->id) . '">' . $this->actionButton('Edit') . '</a>';
                     }
                     if (permission('all-app-details')) {
                         $action .= ' <a class="dropdown-item" href="' . url("walkIn/view/" . $value->id) . '">' . $this->actionButton('View') . '</a>';
                     }
                     if (permission('delete-all-application')) {
-                        if ($value->status == 1) {
-                            $action .= ' <a class="dropdown-item delete_data"  data-id="' . $value->id . '" data-name="' . $value->name . '">' . $this->actionButton('Delete') . '</a>';
-                        }
+                        $action .= ' <a class="dropdown-item delete_data"  data-id="' . $value->id . '" data-name="' . $value->name . '">' . $this->actionButton('Delete') . '</a>';
                     }
                     if (permission('all-app-status')) {
                         $action .= ' <a class="dropdown-item change_status"  data-id="' . $value->id . '"  data-visa_status="' . $value->status . '" data-note="' . $value->note . '" data-phone="' . $value->phone . '" " data-email="' . $value->email . '"><i class="fas fa-check-circle text-success mr-2"></i> Change Status</a>';
@@ -237,6 +235,13 @@ class WalkInController extends BaseController
                             }
                             if ($value->payment_status != 1 or $value->po_invoice) {
                                 $action .= '<a class="dropdown-item" href="' . route("walkIn.money.receipt", $value->id) . '">' . $this->actionButton('Money Receipt') . '</a>';
+                                if ($refundable_amount > 0 && $value->status != 8) {
+                                    $action .= ' <a class="dropdown-item refund"  data-id="' . $value->id . '" data-application_number="' . $value->uniqueKey . '" data-refundable_amount="' . $refundable_amount . '" ><i class="fas fa-undo text-info mr-2"></i> Refund</a>';
+                                }
+
+                                if ($value->paymentRefund) {
+                                    $action .= ' <a class="dropdown-item view-refund"  data-application_number="' . $value->uniqueKey . '" data-refund_amount="' . $value->paymentRefund->amount . '" data-refund_date="' . $value->paymentRefund->refund_date . '" data-reason="' . $value->paymentRefund->reason . '" ><i class="fas fa-file-invoice-dollar text-info mr-2"></i>View Refund</a>';
+                                }
                             }
                         }
                     }
@@ -1543,5 +1548,53 @@ class WalkInController extends BaseController
     {
         $paymentData = Payment::where('walkin_app_info_id', $request->id)->selectRaw('SUM(service_charge) as total_service_charge, SUM(visa_fee) as total_visa_fee')->first();
         return response()->json($paymentData);
+    }
+
+    public function refund(Request $request)
+    {
+        $request->validate([
+            'walkin_app_info_id' => 'required|exists:walkin_app_infos,id',
+            'refund_date'        => 'required|date',
+            'amount'             => 'required|numeric|min:1',
+            'reason'             => 'nullable|string|max:1000',
+            'bank_account_id'    => 'nullable',
+            'account_type'       => 'required',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+
+            $data = [
+                'walkin_app_info_id' => $request->walkin_app_info_id,
+                'refund_date'        => $request->refund_date,
+                'amount'             => $request->amount,
+                'reason'             => $request->reason,
+                'bank_account_id'    => $request->bank_account_id,
+                'created_by'         => Auth::user()->username,
+                'account_type'       => $request->account_type,
+            ];
+            //update WalkInAppInfo payment status
+            $walkInAppInfo = WalkinAppInfo::find($request->walkin_app_info_id);
+            if ($walkInAppInfo) {
+                $walkInAppInfo->status = 8; // Refunded
+                $walkInAppInfo->update();
+            }
+            $result = Refund::create($data);
+
+            DB::commit();
+
+            $output = $this->store_message($result);
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            $output = [
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($output);
     }
 }

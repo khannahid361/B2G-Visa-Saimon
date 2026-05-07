@@ -17,74 +17,143 @@ class WalkinAppInfo extends BaseModel
     use HasFactory;
     protected $table = 'walkin_app_infos';
 
-   protected $fillable = ['uniqueKey','walkIn_app_type','name','information','customer_id','user_id','p_name','passport_number','pp_number_status','pp_number_two','pp_number_two_status','pp_number_three','pp_number_three_status','phone','email','app_status','status','visaType_id','visa_category',
-        'app_received_date','app_received_time','app_received_user','app_processing_date','app_processing_time','app_processing_user','app_missing_documents_date','app_missing_documents_time',
-        'app_missing_documents_user','app_submitted_embassy_date','app_submitted_embassy_time','app_submitted_embassy_user','app_ready_for_delivery_date','app_ready_for_delivery_time','app_ready_for_delivery_user','app_delivered_date','app_delivered_time','app_delivered_user','app_reject_date',
-        'app_reject_time','app_reject_user','note','payment_status','paid_amount','due_amount','discount','customer_group_id','group_price','payment_note','date','payment_by','payment_date','payment_time','scheduleDate','scheduleTime','barcode','po_file','po_invoice','screen_short','discounted_by'];
+    protected $fillable = [
+        'uniqueKey',
+        'walkIn_app_type',
+        'name',
+        'information',
+        'customer_id',
+        'user_id',
+        'p_name',
+        'passport_number',
+        'pp_number_status',
+        'pp_number_two',
+        'pp_number_two_status',
+        'pp_number_three',
+        'pp_number_three_status',
+        'phone',
+        'email',
+        'app_status',
+        'status',
+        'visaType_id',
+        'visa_category',
+        'app_received_date',
+        'app_received_time',
+        'app_received_user',
+        'app_processing_date',
+        'app_processing_time',
+        'app_processing_user',
+        'app_missing_documents_date',
+        'app_missing_documents_time',
+        'app_missing_documents_user',
+        'app_submitted_embassy_date',
+        'app_submitted_embassy_time',
+        'app_submitted_embassy_user',
+        'app_ready_for_delivery_date',
+        'app_ready_for_delivery_time',
+        'app_ready_for_delivery_user',
+        'app_delivered_date',
+        'app_delivered_time',
+        'app_delivered_user',
+        'app_reject_date',
+        'app_reject_time',
+        'app_reject_user',
+        'note',
+        'payment_status',
+        'paid_amount',
+        'due_amount',
+        'discount',
+        'customer_group_id',
+        'group_price',
+        'payment_note',
+        'date',
+        'payment_by',
+        'payment_date',
+        'payment_time',
+        'scheduleDate',
+        'scheduleTime',
+        'barcode',
+        'po_file',
+        'po_invoice',
+        'screen_short',
+        'discounted_by'
+    ];
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function passports(){
-        return $this->hasMany(Passport::class,'walkin_app_info_id','id');
+    public function passports()
+    {
+        return $this->hasMany(Passport::class, 'walkin_app_info_id', 'id');
     }
-    public function statusLogs(){
-        return $this->hasMany(StatusLog::class,'walkin_app_info_id','id');
+    public function statusLogs()
+    {
+        return $this->hasMany(StatusLog::class, 'walkin_app_info_id', 'id');
     }
-    public function missingFiles(){
-        return $this->hasMany(MissingFile::class,'walkin_app_info_id','id');
+    public function missingFiles()
+    {
+        return $this->hasMany(MissingFile::class, 'walkin_app_info_id', 'id');
     }
     public function paymentBy()
     {
-        return $this->belongsTo(User::class,'payment_by','id');
+        return $this->belongsTo(User::class, 'payment_by', 'id');
     }
     public function userAppProcessingUser()
     {
-        return $this->belongsTo(User::class,'app_processing_user','id');
+        return $this->belongsTo(User::class, 'app_processing_user', 'id');
     }
     public function appMissingDocuments()
     {
-        return $this->belongsTo(User::class,'app_missing_documents_user','id');
+        return $this->belongsTo(User::class, 'app_missing_documents_user', 'id');
     }
     public function appSubmittedEmbassyUser()
     {
-        return $this->belongsTo(User::class,'app_submitted_embassy_user','id');
+        return $this->belongsTo(User::class, 'app_submitted_embassy_user', 'id');
     }
     public function appReadyForDeliveryUser()
     {
-        return $this->belongsTo(User::class,'app_ready_for_delivery_user','id');
+        return $this->belongsTo(User::class, 'app_ready_for_delivery_user', 'id');
     }
     public function appDeliveredUser()
     {
-        return $this->belongsTo(User::class,'app_delivered_user','id');
+        return $this->belongsTo(User::class, 'app_delivered_user', 'id');
     }
-    public function collector(){
-        return $this->hasOne(Collector::class,'wlkinAppInfo_id','id');
-    }
-
-    public function walkInAppChecklists(){
-        return $this->hasMany(WalkinAppChecklist::class,'walkin_app_info_id','id');
+    public function collector()
+    {
+        return $this->hasOne(Collector::class, 'wlkinAppInfo_id', 'id');
     }
 
-    public function walkInAppDetailes(){
-        return $this->hasMany(WalkinAppDetails::class,'walkin_app_info_id','id');
+    public function walkInAppChecklists()
+    {
+        return $this->hasMany(WalkinAppChecklist::class, 'walkin_app_info_id', 'id');
+    }
+
+    public function walkInAppDetailes()
+    {
+        return $this->hasMany(WalkinAppDetails::class, 'walkin_app_info_id', 'id');
     }
     public function walkApp()
     {
-        return $this->belongsTo(WalkinApp::class,'walkIn_app_id','id');
+        return $this->belongsTo(WalkinApp::class, 'walkIn_app_id', 'id');
     }
     public function visaType()
     {
-        return $this->belongsTo(VisaType::class,'visaType_id','id');
+        return $this->belongsTo(VisaType::class, 'visaType_id', 'id');
     }
     public function checklist()
     {
-        return $this->belongsTo(Checklist::class,'visa_category','id');
+        return $this->belongsTo(Checklist::class, 'visa_category', 'id');
     }
 
-    public function payments(){
-        return $this->hasMany(Payment::class,'walkin_app_info_id','id');
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'walkin_app_info_id', 'id');
+    }
+
+    public function paymentRefund()
+    {
+        return $this->hasOne(Refund::class, 'walkin_app_info_id', 'id');
     }
 
     protected $order = ['id' => 'desc'];
@@ -147,7 +216,7 @@ class WalkinAppInfo extends BaseModel
 
     private function get_datatable_query()
     {
-        $query = self::with('visaType','walkInAppDetailes','checklist');
+        $query = self::with('visaType', 'walkInAppDetailes', 'checklist', 'paymentRefund');
         if (!empty($this->visaType_id)) {
             $query->where('visaType_id', $this->visaType_id);
         }
@@ -160,7 +229,7 @@ class WalkinAppInfo extends BaseModel
         }
 
         if (!empty($this->passport_no)) {
-            $query->whereHas('passports', function($passportQuery) {
+            $query->whereHas('passports', function ($passportQuery) {
                 $passportQuery->where('passport_no', $this->passport_no);
             });
         }
@@ -181,7 +250,7 @@ class WalkinAppInfo extends BaseModel
     {
         //set column sorting index table column name wise (should match with frontend table header)
 
-        $query = self::with('walkApp:id,walkIn_app_type,name,information','visaType','walkInAppDetailes')->where('app_status','!=',3);
+        $query = self::with('walkApp:id,walkIn_app_type,name,information', 'visaType', 'walkInAppDetailes')->where('app_status', '!=', 3);
         if (!empty($this->visaType_id)) {
             $query->where('visaType_id', $this->visaType_id);
         }
@@ -207,7 +276,7 @@ class WalkinAppInfo extends BaseModel
     {
         //set column sorting index table column name wise (should match with frontend table header)
 
-        $query = self::with('walkApp:id,walkIn_app_type,name,information','visaType','walkInAppDetailes')->where('app_status',3);
+        $query = self::with('walkApp:id,walkIn_app_type,name,information', 'visaType', 'walkInAppDetailes')->where('app_status', 3);
         if (!empty($this->visaType_id)) {
             $query->where('visaType_id', $this->visaType_id);
         }
@@ -235,10 +304,10 @@ class WalkinAppInfo extends BaseModel
     {
         //set column sorting index table column name wise (should match with frontend table header)
 
-        $query = self::with('walkApp:id,walkIn_app_type,name,information','visaType','walkInAppDetailes','collector.user')
-//                ->where('app_status',3)
-//                ->where('status',2)
-                ->where('walkIn_app_type', 3);
+        $query = self::with('walkApp:id,walkIn_app_type,name,information', 'visaType', 'walkInAppDetailes', 'collector.user')
+            //                ->where('app_status',3)
+            //                ->where('status',2)
+            ->where('walkIn_app_type', 3);
         if (!empty($this->visaType_id)) {
             $query->where('visaType_id', $this->visaType_id);
         }
@@ -310,7 +379,6 @@ class WalkinAppInfo extends BaseModel
 
     public function count_all()
     {
-        return self::where('id','!=',1)->count();
+        return self::where('id', '!=', 1)->count();
     }
-
 }

@@ -95,8 +95,8 @@
 @include('walkin::openModal')
 @include('walkin::modal')
 @include('walkin::payment_modal')
-@include('walkin::full_payment_modal')
-@include('walkin::partial_payment_modal')
+@include('walkin::refund.modal')
+@include('walkin::refund.view')
 {{-- @include('walkin::barcode_show')--}}
 
 @endsection
@@ -281,6 +281,33 @@
                             }else {
                                 let previousOptions = $('#' + accountId + '').data('previous-options');
                                 $('#' + accountId + '').empty().append(previousOptions);
+                                $('.selectpicker').selectpicker('refresh');
+                                notification('error', 'No Account Set Under These Account Type');
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(document).on('change','.refund-account-type',function(){
+                let html;
+                let accountType = $(this).find('option:selected').val();
+                let accountId   = $(this).data('account');
+                if(accountType != ''){
+                    $.ajax({
+                        url      : "{{url('get-accounts')}}/" + accountType,
+                        type     : 'GET',
+                        dataType : "JSON",
+                        success  : function(data){
+                            if(data != ''){
+                                html = `<option value="">Select Please</option>`;
+                                $.each(data, function(key, value) { html += '<option value="'+ value.account_id +'">'+ value.name +' </option>'; });
+                                $('#refund_form #'+ accountId +'').empty();
+                                $('#refund_form #'+ accountId +'').append(html);
+                                $('.selectpicker').selectpicker('refresh');
+                            }else {
+                                let previousOptions = $('#refund_form #' + accountId + '').data('previous-options');
+                                $('#refund_form #' + accountId + '').empty().append(previousOptions);
                                 $('.selectpicker').selectpicker('refresh');
                                 notification('error', 'No Account Set Under These Account Type');
                             }
@@ -578,6 +605,102 @@
                     let totalPrice = payableServiceCharge - discount;
                     $('#visa_fee').val(payableVisaFee);
                     $('#service_charge').val(totalPrice).trigger('keyup');
+                });
+            });
+
+            $(document).on('click', '.refund', function () {
+                $('#refund_form #walkin_app_info_id').val($(this).data('id'));
+                $('#refund_form #refundable_amount').val($(this).data('refundable_amount'));
+                $('#refund_form #amount').val($(this).data('refundable_amount'));
+                $('#refund_form #application_number').val($(this).data('application_number'));
+                $('#refund_modal').modal({
+                    keyboard: false,
+                    backdrop: 'static',
+                });
+                $('#refund_modal .modal-title').html('<span>{{__('Visa Fee Refund')}}</span>');
+                $('#refund_modal #payment-status-btn').text('{{__('Visa Fee Refund')}}');
+
+            });
+
+            // view-refund
+            $(document).on('click', '.view-refund', function () {
+
+                $('#view_application_number').val($(this).data('application_number'));
+                $('#view_refund_amount').val($(this).data('refund_amount'));
+                $('#view_refund_date').val($(this).data('refund_date'));
+                $('#view_reason').val($(this).data('reason'));
+
+                $('#view_refund_modal .modal-title').html('<span>{{ __("Visa Fee Refund") }}</span>');
+
+                $('#view_refund_modal').modal({
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+
+            });
+
+
+            $(document).on('keyup', '#refund_form #amount', function () {
+                let refundableAmount = $('#refund_form #refundable_amount').val();
+                let refundAmount = $('#refund_form #amount').val();
+                if (refundAmount > refundableAmount) {
+                    refundAmount = refundableAmount;
+                    $('#refund_form #amount').val(refundableAmount);
+                    notification('error', '{{__('Refund amount cannot be bigger than refundable amount')}}');
+                }
+            });
+
+            $(document).on('click', '#refundButton', function () {
+                var form = $('#refund_form');
+
+                var data = {
+                    walkin_app_info_id: form.find('#walkin_app_info_id').val(),
+                    account_type: form.find('#account_type').val(),
+                    bank_account_id: form.find('#bank_account_id').val(),
+                    reason: form.find('#reason').val(),
+                    amount: form.find('#amount').val(),
+                    refund_date: form.find('#refund_date').val(),
+                    _token: "{{ csrf_token() }}"
+                };
+
+                $.ajax({
+                    url: "{{ route('walkIn.refund') }}",
+                    type: "POST",
+                    data: data,
+                    dataType: "JSON",
+                    beforeSend: function () {
+                        $('#refundButton')
+                            .addClass('kt-spinner kt-spinner--md kt-spinner--light')
+                            .prop('disabled', true);
+                    },
+                    complete: function () {
+                        $('#refundButton')
+                            .removeClass('kt-spinner kt-spinner--md kt-spinner--light')
+                            .prop('disabled', false);
+                    },
+                    success: function (data) {
+                        notification(data.status, data.message);
+
+                        if (data.status === 'success') {
+                            $('#refund_modal').modal('hide');
+                            if (typeof table !== 'undefined' && table.ajax) {
+                                table.ajax.reload(null, false);
+                            }
+                            location.reload();
+                        } else if (data.errors) {
+                            form.find('.error.text-danger').remove(); // clear old errors
+                            form.find('.is-invalid').removeClass('is-invalid');
+
+                            $.each(data.errors, function (key, value) {
+                                var field = form.find('#' + key);
+                                field.addClass('is-invalid');
+                                field.parent().append('<small class="error text-danger">' + value + '</small>');
+                            });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        console.error(thrownError + '\n' + xhr.statusText + '\n' + xhr.responseText);
+                    }
                 });
             });
         });

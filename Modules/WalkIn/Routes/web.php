@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('po-invoice/{id}', 'WalkInController@poInvoice')->name('po.invoice');
         Route::post('save-po-invoice', 'WalkInController@poInvoiceSave')->name('po.invoice.save');
         Route::post('get-max-discount', 'WalkInController@getMaxDiscount')->name('get.max.discount');
+        Route::post('refund', 'WalkInController@refund')->name('refund');
 
     });
     Route::get('type-wise-cat/{id}', 'WalkInController@VisaTypeWiseCat')->name('type.wise.cat');

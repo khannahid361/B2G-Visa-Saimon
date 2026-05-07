@@ -95,6 +95,7 @@ define('WALKIN_APP_STATUS',[
     '5'=> '<span class="label label-success label-pill label-inline" style="min-width:70px !important;font-size:12pxfont-size:12px;padding: 19px 0px;text-align: center;">Ready for delivery</span>',
     '6'=> '<span class="label label-success label-pill label-inline" style="min-width:70px !important;font-size:12pxfont-size:12px;padding: 19px 0px;text-align: center;">Delivered</span>',
     '7'=> '<span class="label label-danger label-pill label-inline" style="min-width:70px !important;font-size:12pxfont-size:12px;padding: 19px 0px;text-align: center;">Cancel</span>',
+    '8'=> '<span class="label label-danger label-pill label-inline" style="min-width:70px !important;font-size:12pxfont-size:12px;padding: 19px 0px;text-align: center;">Refunded</span>',
 ]);
 define('WALKIN_APP_STATUS_VALUE',[
     '1'=>'Application Received',
@@ -104,6 +105,7 @@ define('WALKIN_APP_STATUS_VALUE',[
     '5'=> 'Ready for delivery',
     '6'=> 'Delivered',
     '7'=> 'Cancel',
+    '8'=> 'Refunded'
 ]);
 define('WALKIN_APP_PP_RFD_VALUE',[
     '1'=>'Ready for Delivery Passport No',
