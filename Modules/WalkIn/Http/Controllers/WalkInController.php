@@ -218,6 +218,17 @@ class WalkInController extends BaseController
                     }
                     if (permission('delete-all-application')) {
                         $action .= ' <a class="dropdown-item delete_data"  data-id="' . $value->id . '" data-name="' . $value->name . '">' . $this->actionButton('Delete') . '</a>';
+
+                        if ($value->payment_status != 1 or $value->po_invoice) {
+                            $action .= '<a class="dropdown-item" href="' . route("walkIn.money.receipt", $value->id) . '">' . $this->actionButton('Money Receipt') . '</a>';
+                            if ($refundable_amount > 0 && $value->status != 8) {
+                                $action .= ' <a class="dropdown-item refund"  data-id="' . $value->id . '" data-application_number="' . $value->uniqueKey . '" data-refundable_amount="' . $refundable_amount . '" ><i class="fas fa-undo text-info mr-2"></i> Refund</a>';
+                            }
+
+                            if ($value->paymentRefund) {
+                                $action .= ' <a class="dropdown-item view-refund"  data-application_number="' . $value->uniqueKey . '" data-refund_amount="' . $value->paymentRefund->amount . '" data-refund_date="' . $value->paymentRefund->refund_date . '" data-reason="' . $value->paymentRefund->reason . '" ><i class="fas fa-file-invoice-dollar text-info mr-2"></i>View Refund</a>';
+                            }
+                        }
                     }
                     if (permission('all-app-status')) {
                         $action .= ' <a class="dropdown-item change_status"  data-id="' . $value->id . '"  data-visa_status="' . $value->status . '" data-note="' . $value->note . '" data-phone="' . $value->phone . '" " data-email="' . $value->email . '"><i class="fas fa-check-circle text-success mr-2"></i> Change Status</a>';
@@ -232,16 +243,6 @@ class WalkInController extends BaseController
                             $visaFee = $value->checklist->price - $value->checklist->service_charge;
                             if ($value->payment_status != 2) {
                                 $action .= ' <a class="dropdown-item change_payment_status"  data-id="' . $value->id . '"  data-payment_status="' . $value->payment_status . '" data-price="' . $val . '" data-due_amount="' . $value->due_amount . '" data-phone="' . $value->phone . '" " data-email="' . $value->email . '" data-service_charge="' . $value->checklist->service_charge . '" data-visa_fee="' . $visaFee . '"><i class="fas fa-plus-square text-info mr-2"></i> Update Payment</a>';
-                            }
-                            if ($value->payment_status != 1 or $value->po_invoice) {
-                                $action .= '<a class="dropdown-item" href="' . route("walkIn.money.receipt", $value->id) . '">' . $this->actionButton('Money Receipt') . '</a>';
-                                if ($refundable_amount > 0 && $value->status != 8) {
-                                    $action .= ' <a class="dropdown-item refund"  data-id="' . $value->id . '" data-application_number="' . $value->uniqueKey . '" data-refundable_amount="' . $refundable_amount . '" ><i class="fas fa-undo text-info mr-2"></i> Refund</a>';
-                                }
-
-                                if ($value->paymentRefund) {
-                                    $action .= ' <a class="dropdown-item view-refund"  data-application_number="' . $value->uniqueKey . '" data-refund_amount="' . $value->paymentRefund->amount . '" data-refund_date="' . $value->paymentRefund->refund_date . '" data-reason="' . $value->paymentRefund->reason . '" ><i class="fas fa-file-invoice-dollar text-info mr-2"></i>View Refund</a>';
-                                }
                             }
                         }
                     }
