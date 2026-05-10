@@ -171,6 +171,9 @@ Route::group(['middleware' => ['auth']], function () {
     //SSLCOMMERZ END
 
 
+    //refund report
+    Route::get('refund-report', 'ReportController@refundReport')->name('refund.report');
+    Route::post('refund-report-data', 'ReportController@refundReportData')->name('refund.report.data');
 });
 Route::get('/get-payment-date/{id}', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 Route::post('/pay', [SslCommerzPaymentController::class, 'index']);

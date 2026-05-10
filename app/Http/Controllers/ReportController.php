@@ -75,7 +75,7 @@ class ReportController extends BaseController
         return view('report.collectionDetailsold', compact('report'));
     }
 
-        public function totalCollectionDetailData(Request $request)
+    public function totalCollectionDetailData(Request $request)
     {
         $setTitle    = __('Total Collection');
         $setSubTitle = __('Total Collection Report Details');
@@ -274,8 +274,8 @@ class ReportController extends BaseController
         return view('report.service_charge_payment_report', compact('report'));
     }
 
-    
-        public function serviceChargeDetailsReport(Request $request)
+
+    public function serviceChargeDetailsReport(Request $request)
     {
         $setTitle = __('Service Charge Details');
         $setSubTitle = __('Service Charge Details Report');
@@ -313,6 +313,46 @@ class ReportController extends BaseController
             ->get();
 
         return view('report.service_charge_details', compact('report'));
+    }
+
+    public function refundReport(Request $request)
+    {
+        $setTitle = __('Refund Report');
+        $setSubTitle = __('Refund Report');
+        $this->setPageData($setSubTitle, $setSubTitle, 'fas fa-file-signature', [['name' => $setTitle, 'link' => 'javascript::void();'], ['name' => $setSubTitle]]);
+        return view('report.refund_report.index');
+    }
+
+    public function refundReportData(Request $request)
+    {
+        // Execute the query and retrieve the data
+        $fromDate = $request->from_date;
+        $toDate   = $request->to_date;
+
+        $report = WalkinAppInfo::with('paymentRefund')
+            ->select(
+                'walkin_app_infos.id',
+                'walkin_app_infos.name',
+                'walkin_app_infos.p_name',
+                'walkin_app_infos.uniqueKey',
+                'walkin_app_infos.visaType_id',
+                'walkin_app_infos.visa_category',
+                'walkin_app_infos.email',
+                'walkin_app_infos.phone'
+            )
+            ->whereHas('paymentRefund', function ($query) use ($fromDate, $toDate) {
+
+                if ($fromDate && $toDate) {
+                    $query->whereBetween('refund_date', [$fromDate, $toDate]);
+                }
+            })
+            ->orderBy('walkin_app_infos.id', 'DESC')
+            ->get();
+
+        // return view('report.refund_report.data', compact('report'))->render();
+        return response()->json([
+            'report' => $report
+        ]);
     }
 
     public function paymentAndChecklist()
